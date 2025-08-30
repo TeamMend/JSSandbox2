@@ -170,7 +170,7 @@ import {
 import { DataManager, UrlAdaptor, Query } from '@syncfusion/ej2-data'
 
 // Your Azure Function App endpoint URL
-const serviceUrl = 'https://icy-river-0fa400b10.1.azurestaticapps.net'
+const serviceUrl = 'https://icy-river-0fa400b10.1.azurestaticapps.net/jswebapis'
 
 const schedulerQuery = ref(
   new Query().addParams('table', 'scheduled_events').where('isApproved', '==', 1),
