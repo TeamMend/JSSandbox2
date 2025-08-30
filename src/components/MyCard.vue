@@ -3,9 +3,9 @@ const props = defineProps<{
   cardTitle: string
   cardSubTitle: string
   cardContents: string
-  customCardClass: object | string
-  customCardHeaderStyles: object | string
-  customCardTextStyles: object | string
+  customCardClass: StyleValue
+  customCardHeaderStyles: StyleValue
+  customCardTextStyles: StyleValue
 }>()
 </script>
 
@@ -22,13 +22,7 @@ const props = defineProps<{
     </v-card-text>
   </v-card>
 </template>
-<!-- <template v-slot:title>
-        {{ cardTitle }}
-    </template>
-    <template v-slot:subtitle>
-        {{ cardSubTitle }}
-    </template v-slot:subtitle>
-    <template v-slot:text>
-        {{ cardContents }}
-    </template v-slot:text> -->
-<!-- <v-card :title="cardTitle" :subtitle="cardSubTitle" :text="cardContents" ></v-card> -->
+
+<script lang="ts">
+import type { StyleValue } from 'vue'
+</script>

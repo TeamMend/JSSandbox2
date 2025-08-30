@@ -157,11 +157,15 @@ import {
   type ActionEventArgs,
   type DragEventArgs,
   type PopupOpenEventArgs,
+  ScheduleComponent,
 } from '@syncfusion/ej2-vue-schedule'
 
 import { ListViewComponent as EjsListview } from '@syncfusion/ej2-vue-lists'
 
-import { DateTimePickerComponent as EjsDatetimepicker } from '@syncfusion/ej2-vue-calendars'
+import {
+  DateTimePickerComponent as EjsDatetimepicker,
+  type events,
+} from '@syncfusion/ej2-vue-calendars'
 
 import { DataManager, UrlAdaptor, Query } from '@syncfusion/ej2-data'
 
@@ -202,8 +206,8 @@ const platformData = ref([
   },
 ])
 
-const myScheduler = ref(null)
-const eventsList = ref(null)
+const myScheduler = ref<EjsSchedule | null>(null)
+const eventsList = ref<EjsListview | null>(null)
 
 const schedulerEventSettings = reactive({
   dataSource: eventsDataManager,
@@ -221,9 +225,18 @@ const schedulerEventSettings = reactive({
 
 provide('schedule', [Agenda, TimelineViews, TimelineMonth, Day, Week, Month, DragAndDrop])
 
-let cardData = null
-const cardDragStart = (e: DragEvent, item: object) => {
-  cardData = item
+interface eventsData {
+  id: number
+  subject: string
+  startTime: Date
+  description: string
+  isApproved: boolean
+  platformId: number
+}
+
+let selectedItem: eventsData | null = null
+const cardDragStart = (e: DragEvent, item: eventsData) => {
+  selectedItem = item
   const chipElement = document.createElement('div')
 
   // 3. Set the text and style the element to look like a chip
@@ -249,7 +262,7 @@ const cardDragStart = (e: DragEvent, item: object) => {
   // on the chip. Using half the width and height is a good starting point.
   const chipWidth = chipElement.offsetWidth
   const chipHeight = chipElement.offsetHeight
-  e.dataTransfer.setDragImage(chipElement, chipWidth / 2, chipHeight / 2)
+  e.dataTransfer?.setDragImage(chipElement, chipWidth / 2, chipHeight / 2)
 }
 
 const cardDragStop = (e: DragEvent) => {}
@@ -259,20 +272,19 @@ const schedulerDragOver = (e: DragEvent) => {
 }
 
 const schedulerGrabDrop = (e: DragEventArgs) => {
-  console.log(closest(e.target, '.e-work-cells'))
-  if (cardData?.isApproved != true) {
+  if (selectedItem?.isApproved != true) {
     return
   }
 
   if (myScheduler.value) {
     if (e.target?.classList.contains('e-work-cells')) {
-      let times = myScheduler.value.getCellDetails(e.target)
+      let times: any = myScheduler?.value.getCellDetails(e.target)
 
       let eventData = {
-        id: cardData?.id,
-        subject: cardData?.subject,
-        startTime: times.startTime,
-        description: cardData.description,
+        id: selectedItem?.id,
+        subject: selectedItem?.subject,
+        startTime: times?.startTime,
+        description: selectedItem?.description,
       }
 
       myScheduler.value.openEditor(eventData, 'EditOccurrence', true)
