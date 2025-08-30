@@ -82,6 +82,7 @@
               >
               </e-resource>
             </e-resources>
+            <template v-slot:headerTemplate></template>
             <template v-slot:editorHeaderTemplate="{ data }">
               <div v-show="data.id === null">Create Event</div>
               <div style="text-transform: uppercase" v-show="data.id != null">
